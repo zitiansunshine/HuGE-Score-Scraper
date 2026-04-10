@@ -39,6 +39,9 @@ async def fetch_result(gene: str, phenotype: str) -> str:
                     timeout=90_000
                 )
             
+            # Keep the page open briefly so delayed score updates can settle.
+            await page.wait_for_timeout(20_000)
+
             # Extract and process result text
             result_text = (await result_div.text_content()).strip()
             match = re.search(r'([\d.]+)', result_text)
